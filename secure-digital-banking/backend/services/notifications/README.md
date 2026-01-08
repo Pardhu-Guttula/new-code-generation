@@ -1,1 +1,1 @@
-secure-digital-banking/backend/services/notifications/README.md
+This directory contains service files for handling notification-related logic in the Secure Digital Banking application.
