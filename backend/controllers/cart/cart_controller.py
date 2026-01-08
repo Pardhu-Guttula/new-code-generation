@@ -57,4 +57,30 @@ def init_cart_routes(service: CartService) -> Blueprint:
             logger.error("Unexpected error removing from cart: %s", e)
             return jsonify({"error": "Internal server error"}), 500
 
+    @cart_bp.route("/update", methods=["POST"])
+    def update_cart_item() -> tuple:
+        data = request.get_json(force=True)
+        user_id = data.get("user_id")
+        product_id = data.get("product_id")
+        quantity = data.get("quantity")
+
+        if user_id is None or product_id is None or quantity is None:
+            return jsonify({"error": "User ID, Product ID, and Quantity are required fields"}), 400
+
+        try:
+            cart = service.update_cart_item(user_id, product_id, quantity)
+            return jsonify({
+                "user_id": cart.user_id,
+                "items": [{
+                    "product_id": item.product_id,
+                    "quantity": item.quantity
+                } for item in cart.items]
+            }), 200
+        except ValueError as ve:
+            logger.warning("Updating cart item failed: %s", ve)
+            return jsonify({"error": str(ve)}), 400
+        except Exception as e:
+            logger.error("Unexpected error updating cart item: %s", e)
+            return jsonify({"error": "Internal server error"}), 500
+
     return cart_bp
