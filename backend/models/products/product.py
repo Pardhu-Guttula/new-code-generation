@@ -7,7 +7,7 @@ class Product(BaseModel):
     name: constr(min_length=1)
     description: Optional[constr(min_length=1)] = ""
     price: condecimal(gt=0)
-    category: Optional[str] = None
+    category_id: Optional[int] = None
     created_at: datetime
     updated_at: datetime
 
