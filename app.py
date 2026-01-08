@@ -3,23 +3,23 @@ from flask import Flask
 from flask.sessions import SecureCookieSessionInterface
 from flask_session import Session
 from backend.config.settings import settings
-from backend.repositories.users.user_repository import UserRepository
-from backend.services.user_management.profile_service import ProfileService
-from backend.controllers.users.profile_controller import init_profile_routes
+from backend.repositories.products.product_repository import ProductRepository
+from backend.services.product_catalog.product_creation_service import ProductCreationService
+from backend.controllers.products.product_creation_controller import init_product_creation_routes
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config["SECRET_KEY"] = settings.SECRET_KEY
     app.config["SESSION_TYPE"] = "filesystem"
-    
+
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
     Session(app)  # Enabling server-side session management
 
-    user_repo = UserRepository(settings.DATABASE_PATH)
-    profile_service = ProfileService(user_repo)
+    product_repo = ProductRepository(settings.DATABASE_PATH)
+    product_creation_service = ProductCreationService(product_repo)
 
-    app.register_blueprint(init_profile_routes(profile_service), url_prefix="/api/users")
+    app.register_blueprint(init_product_creation_routes(product_creation_service), url_prefix="/api/products")
 
     @app.route("/health", methods=["GET"])
     def health() -> dict:
