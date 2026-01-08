@@ -1,1 +1,1 @@
-secure-digital-banking/backend/config/README.md
+This directory contains configuration files for the backend services of the Secure Digital Banking application.
