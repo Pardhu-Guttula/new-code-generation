@@ -1,1 +1,1 @@
-secure-digital-banking/backend/models/audit/README.md
+This directory contains model files for audit-related data structures in the Secure Digital Banking application.
