@@ -1,0 +1,34 @@
+from flask import Blueprint, request, jsonify
+from backend.services.product_catalog.product_service import ProductService
+from backend.repositories.products.product_repository import ProductRepository
+
+product_blueprint = Blueprint('product', __name__)
+product_repository = ProductRepository()
+product_service = ProductService(product_repository)
+
+@product_blueprint.route('/products', methods=['POST'])
+def add_product():
+    data = request.json
+    product = product_service.add_product(data)
+    return jsonify(product.dict()), 201
+
+@product_blueprint.route('/products/<int:product_id>', methods=['PUT'])
+def update_product(product_id):
+    data = request.json
+    product = product_service.update_product(product_id, data)
+    return jsonify(product.dict()), 200
+
+@product_blueprint.route('/products/<int:product_id>', methods=['GET'])
+def get_product(product_id):
+    product = product_service.get_product(product_id)
+    return jsonify(product.dict()), 200
+
+@product_blueprint.route('/products', methods=['GET'])
+def list_products():
+    products = product_service.list_products()
+    return jsonify([product.dict() for product in products]), 200
+
+@product_blueprint.route('/products/<int:product_id>', methods=['DELETE'])
+def delete_product(product_id):
+    product_service.delete_product(product_id)
+    return jsonify({"message": "Product deleted"}), 200
