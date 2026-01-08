@@ -36,3 +36,11 @@ def delete_product(product_id):
         return jsonify({"error": "Product deletion not confirmed"}), 400
     product_service.delete_product(product_id)
     return jsonify({"message": "Product deleted"}), 200
+
+@product_blueprint.route('/products/search', methods=['GET'])
+def search_products():
+    query = request.args.get('query', '')
+    page = int(request.args.get('page', 1))
+    page_size = int(request.args.get('page_size', 10))
+    products = product_service.search_products(query, page, page_size)
+    return jsonify([product.dict() for product in products]), 200
