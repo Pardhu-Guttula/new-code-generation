@@ -1,1 +1,1 @@
-secure-digital-banking/backend/controllers/accounts/README.md
+This directory contains controller files for account management features in the Secure Digital Banking application.
