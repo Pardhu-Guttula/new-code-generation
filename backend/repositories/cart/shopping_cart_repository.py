@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+from typing import List
 from backend.models.cart.shopping_cart import ShoppingCart, CartItem
 import logging
 
@@ -19,8 +20,9 @@ class ShoppingCartRepository:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO cart_items (user_id, product_id, quantity, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-                (user_id, product_id, quantity, datetime.now(), datetime.now())
+                "INSERT INTO cart_items (user_id, product_id, quantity, created_at, updated_at) VALUES (?, ?, ?, ?, ?) "
+                "ON CONFLICT(user_id, product_id) DO UPDATE SET quantity = quantity + ?, updated_at = ?",
+                (user_id, product_id, quantity, datetime.now(), datetime.now(), quantity, datetime.now())
             )
             items = self.get_cart_items(user_id)
             return ShoppingCart(user_id=user_id, items=items, created_at=datetime.now(), updated_at=datetime.now())
@@ -35,3 +37,14 @@ class ShoppingCartRepository:
             )
             rows = cursor.fetchall()
             return [CartItem(*row) for row in rows]
+
+    def remove_from_cart(self, user_id: int, product_id: int) -> ShoppingCart:
+        logger.info("Removing product '%s' from cart for user '%s'", product_id, user_id)
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "DELETE FROM cart_items WHERE user_id=? AND product_id=?",
+                (user_id, product_id)
+            )
+            items = self.get_cart_items(user_id)
+            return ShoppingCart(user_id=user_id, items=items, created_at=datetime.now(), updated_at=datetime.now())
