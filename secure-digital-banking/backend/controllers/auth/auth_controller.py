@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from backend.repositories.users.user_repository import UserRepository
 from backend.services.auth.auth_service import AuthService
+from backend.models.auth.masked_password_policy import MaskedPasswordPolicy
 
 auth_controller = Blueprint('auth_controller', __name__)
 user_repository = UserRepository()
-auth_service = AuthService(user_repository, secret_key="your-secret-key")
+masked_password_policy = MaskedPasswordPolicy(show_start=1, show_end=1)
+auth_service = AuthService(user_repository, secret_key="your-secret-key", masked_password_policy=masked_password_policy)
 
 @auth_controller.route('/auth/register', methods=['POST'])
 def register_user():
@@ -27,9 +29,10 @@ def login_user():
     email = json_data.get('email')
     password = json_data.get('password')
 
+    masked_password = auth_service.mask_password(password)
     user = auth_service.authenticate_user(email, password)
     if not user:
-        return jsonify({'message': 'Invalid credentials'}), 401
+        return jsonify({'message': 'Invalid credentials', 'masked_password': masked_password}), 401
 
     access_token = auth_service.create_access_token(user.id)
-    return jsonify({'access_token': access_token}), 200
+    return jsonify({'access_token': access_token, 'masked_password': masked_password}), 200
