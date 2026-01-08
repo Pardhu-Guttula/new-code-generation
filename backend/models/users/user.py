@@ -1,14 +1,10 @@
 from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel, EmailStr, constr
+from pydantic import BaseModel, EmailStr
 
 class User(BaseModel):
     id: int
     email: EmailStr
-    password: constr(min_length=8)
-    login_attempts: int = 0
-    is_locked: bool = False
-    last_login_at: Optional[datetime] = None
+    password: str
     created_at: datetime
     updated_at: datetime
 
