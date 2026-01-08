@@ -1,0 +1,49 @@
+{
+  "backend/config/README.md": "",
+  "backend/controllers/users/README.md": "",
+  "backend/controllers/products/README.md": "",
+  "backend/controllers/cart/README.md": "",
+  "backend/controllers/orders/README.md": "",
+  "backend/controllers/reviews/README.md": "",
+  "backend/controllers/promotions/README.md": "",
+  "backend/controllers/analytics/README.md": "",
+  "backend/controllers/support/README.md": "",
+  "backend/services/auth/README.md": "",
+  "backend/services/user_management/README.md": "",
+  "backend/services/product_catalog/README.md": "",
+  "backend/services/cart/README.md": "",
+  "backend/services/checkout/README.md": "",
+  "backend/services/order_management/README.md": "",
+  "backend/services/reviews/README.md": "",
+  "backend/services/promotions/README.md": "",
+  "backend/services/analytics/README.md": "",
+  "backend/services/support/README.md": "",
+  "backend/models/users/README.md": "",
+  "backend/models/products/README.md": "",
+  "backend/models/orders/README.md": "",
+  "backend/models/reviews/README.md": "",
+  "backend/models/promotions/README.md": "",
+  "backend/models/analytics/README.md": "",
+  "backend/models/support/README.md": "",
+  "backend/repositories/users/README.md": "",
+  "backend/repositories/products/README.md": "",
+  "backend/repositories/orders/README.md": "",
+  "backend/repositories/reviews/README.md": "",
+  "backend/repositories/promotions/README.md": "",
+  "backend/repositories/analytics/README.md": "",
+  "backend/repositories/support/README.md": "",
+  "backend/integrations/payment_gateway/README.md": "",
+  "backend/integrations/shipping/README.md": "",
+  "backend/integrations/customer_support/README.md": "",
+  "backend/tests/unit/README.md": "",
+  "backend/tests/integration/README.md": "",
+  "backend/tests/e2e/README.md": ""
+}
+
+**Given the requirement for a responsive user interface using Flask and the strictly backend-focused folder structure provided, the task seems somewhat misaligned since responsive design typically involves front-end work, primarily managed with HTML/CSS and JavaScript. 
+
+Nevertheless, I will generate the necessary backend interfaces and controllers to facilitate a responsive design flow.
+
+Note that without more details on how the view or template rendering is being managed (e.g., Jinja2 in Flask), the implementation will accordingly involve providing endpoints that could return data or templates suitable for rendering on various devices. 
+
+Here are the files in the order they are generated:**
