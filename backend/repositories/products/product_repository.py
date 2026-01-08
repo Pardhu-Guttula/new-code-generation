@@ -1,6 +1,5 @@
 import sqlite3
-from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 from backend.models.products.product import Product
 import logging
 
@@ -15,21 +14,23 @@ class ProductRepository:
         conn.row_factory = sqlite3.Row
         return conn
 
-    def get_product_by_id(self, product_id: int) -> Optional[Product]:
-        logger.info("Fetching product by id='%s'", product_id)
+    def search_products(self, query: str, category_id: Optional[int] = None, page: int = 1, per_page: int = 10) -> List[Product]:
+        logger.info("Searching products with query='%s', category_id=%s", query, category_id)
+        offset = (page - 1) * per_page
         with self._get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                "SELECT id, name, description, price, category_id, is_deleted, created_at, updated_at FROM products WHERE id=?",
-                (product_id,),
-            )
-            row = cursor.fetchone()
-            return Product(*row) if row else None
-
-    def delete_product(self, product_id: int) -> None:
-        logger.info("Deleting product id='%s'", product_id)
-        with self._get_connection() as conn:
-            conn.execute(
-                "UPDATE products SET is_deleted=?, updated_at=? WHERE id=?",
-                (True, datetime.now(), product_id),
-            )
+            sql_query = """
+                SELECT id, name, description, price, category_id, is_deleted, created_at, updated_at
+                FROM products
+                WHERE (name LIKE ? OR description LIKE ?)
+                AND is_deleted = 0
+            """
+            params = [f"%{query}%", f"%{query}%"]
+            if category_id:
+                sql_query += " AND category_id = ?"
+                params.append(category_id)
+            sql_query += " LIMIT ? OFFSET ?"
+            params.extend([per_page, offset])
+            cursor.execute(sql_query, params)
+            rows = cursor.fetchall()
+            return [Product(*row) for row in rows]
