@@ -5,7 +5,6 @@ from backend.controllers.notifications.notification_controller import notificati
 from backend.controllers.documents.document_controller import document_controller
 from backend.controllers.requests.request_controller import request_controller
 from backend.controllers.dashboard.dashboard_controller import dashboard_controller
-from backend.controllers.audit.audit_controller import audit_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -15,7 +14,6 @@ def create_app() -> Flask:
     app.register_blueprint(document_controller, url_prefix='/api')
     app.register_blueprint(request_controller, url_prefix='/api')
     app.register_blueprint(dashboard_controller, url_prefix='/api')
-    app.register_blueprint(audit_controller, url_prefix='/api')
     return app
 
 if __name__ == '__main__':
