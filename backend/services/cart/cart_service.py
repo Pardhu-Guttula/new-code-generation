@@ -1,31 +1,32 @@
-import logging
-from typing import List
-from backend.repositories.cart.shopping_cart_repository import ShoppingCartRepository
-from backend.models.cart.shopping_cart import ShoppingCart, CartItem
-
-logger = logging.getLogger(__name__)
+from backend.repositories.cart.cart_repository.py import CartRepository
+from backend.models.cart.cart import Cart, CartItem
 
 class CartService:
-    def __init__(self, cart_repo: ShoppingCartRepository) -> None:
-        self._cart_repo = cart_repo
+    def __init__(self, cart_repository: CartRepository):
+        self.cart_repository = cart_repository
 
-    def add_to_cart(self, user_id: int, product_id: int, quantity: int) -> ShoppingCart:
-        if quantity <= 0:
-            raise ValueError("Quantity must be a positive number")
-        logger.info("Service layer adding product '%s' to cart for user '%s'", product_id, user_id)
-        return self._cart_repo.add_to_cart(user_id, product_id, quantity)
+    def get_cart(self, user_id: int) -> Cart:
+        return self.cart_repository.get_cart_by_user_id(user_id)
 
-    def remove_from_cart(self, user_id: int, product_id: int) -> ShoppingCart:
-        logger.info("Service layer removing product '%s' from cart for user '%s'", product_id, user_id)
-        return self._cart_repo.remove_from_cart(user_id, product_id)
+    def add_product_to_cart(self, user_id: int, product_id: int, quantity: int) -> Cart:
+        cart = self.cart_repository.get_cart_by_user_id(user_id)
+        if not cart:
+            cart = Cart(user_id=user_id, items=[], created_at=datetime.now(), updated_at=datetime.now())
+        item = next((item for item in cart.items if item.product_id == product_id), None)
+        if item:
+            item.quantity += quantity
+        else:
+            cart.items.append(CartItem(product_id=product_id, quantity=quantity))
+        cart.updated_at = datetime.now()
+        return self.cart_repository.create_cart(cart)
+    
+    def remove_product_from_cart(self, user_id: int, product_id: int) -> Cart:
+        cart = self.cart_repository.get_cart_by_user_id(user_id)
+        if not cart:
+            raise Exception('Cart not found')
+        cart.items = [item for item in cart.items if item.product_id != product_id]
+        cart.updated_at = datetime.now()
+        return self.cart_repository.update_cart(cart)
 
-    def update_cart_item(self, user_id: int, product_id: int, quantity: int) -> ShoppingCart:
-        if quantity <= 0:
-            raise ValueError("Quantity must be a positive number")
-        logger.info("Service layer updating product '%s' quantity to '%s' for user '%s'", product_id, quantity, user_id)
-        return self._cart_repo.update_cart_item(user_id, product_id, quantity)
-
-    def get_user_cart(self, user_id: int) -> ShoppingCart:
-        logger.info("Fetching shopping cart for user '%s'", user_id)
-        items = self._cart_repo.get_cart_items(user_id)
-        return ShoppingCart(user_id=user_id, items=items, created_at=datetime.now(), updated_at=datetime.now())
+    def clear_cart(self, user_id: int) -> None:
+        self.cart_repository.delete_cart(user_id)
