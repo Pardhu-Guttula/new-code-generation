@@ -6,5 +6,8 @@ class User:
     id: int
     email: str
     password: str
+    login_attempts: int
+    is_locked: bool
+    last_login_at: datetime
     created_at: datetime
     updated_at: datetime
