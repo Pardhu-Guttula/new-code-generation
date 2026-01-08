@@ -4,23 +4,22 @@ from flask.sessions import SecureCookieSessionInterface
 from flask_session import Session
 from backend.config.settings import settings
 from backend.repositories.users.user_repository import UserRepository
-from backend.services.auth.login_service import LoginService
-from backend.controllers.users.login_controller import init_login_routes
+from backend.services.auth.password_reset_service import PasswordResetService
+from backend.controllers.users.password_reset_controller import init_password_reset_routes
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config["SECRET_KEY"] = settings.SECRET_KEY
     app.config["SESSION_TYPE"] = "filesystem"
-    app.config["PERMANENT_SESSION_LIFETIME"] = settings.PERMANENT_SESSION_LIFETIME
-
+    
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
     Session(app)  # Enabling server-side session management
 
     user_repo = UserRepository(settings.DATABASE_PATH)
-    login_service = LoginService(user_repo)
-    
-    app.register_blueprint(init_login_routes(login_service), url_prefix="/api/users")
+    password_reset_service = PasswordResetService(user_repo)
+
+    app.register_blueprint(init_password_reset_routes(password_reset_service), url_prefix="/api/users")
 
     @app.route("/health", methods=["GET"])
     def health() -> dict:
