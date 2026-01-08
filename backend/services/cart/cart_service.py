@@ -19,12 +19,25 @@ class CartService:
             cart.items.append(CartItem(product_id=product_id, quantity=quantity))
         cart.updated_at = datetime.now()
         return self.cart_repository.create_cart(cart)
-    
+
     def remove_product_from_cart(self, user_id: int, product_id: int) -> Cart:
         cart = self.cart_repository.get_cart_by_user_id(user_id)
         if not cart:
             raise Exception('Cart not found')
         cart.items = [item for item in cart.items if item.product_id != product_id]
+        cart.updated_at = datetime.now()
+        return self.cart_repository.update_cart(cart)
+    
+    def modify_product_quantity(self, user_id: int, product_id: int, quantity: int) -> Cart:
+        if quantity <= 0:
+            raise ValueError('Quantity must be a positive integer')
+        cart = self.cart_repository.get_cart_by_user_id(user_id)
+        if not cart:
+            raise Exception('Cart not found')
+        item = next((item for item in cart.items if item.product_id == product_id), None)
+        if not item:
+            raise Exception('Product not found in cart')
+        item.quantity = quantity
         cart.updated_at = datetime.now()
         return self.cart_repository.update_cart(cart)
 
