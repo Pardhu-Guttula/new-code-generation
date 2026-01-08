@@ -1,0 +1,1 @@
+self-service-banking/backend/tests/integration/README.md
