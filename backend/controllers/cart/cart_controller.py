@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from backend.services.cart.cart_service import CartService
 from backend.repositories.cart.cart_repository import CartRepository
+from backend.services.product_catalog.product_service import ProductService
 
 cart_blueprint = Blueprint('cart', __name__)
 cart_repository = CartRepository()
@@ -10,7 +11,7 @@ cart_service = CartService(cart_repository)
 def get_cart(user_id):
     cart = cart_service.get_cart(user_id)
     # Calculate total price within this endpoint or create another function in CartService for calculating the total price.
-    total_price = sum(item.quantity * product_service.get_product(item.product_id).price for item in cart.items)
+    total_price = sum(item.quantity * ProductService().get_product(item.product_id).price for item in cart.items)
     response_data = cart.dict()
     response_data['total_price'] = total_price
     return jsonify(response_data), 200
@@ -40,7 +41,7 @@ def modify_product_quantity(user_id):
     product_id = data['product_id']
     quantity = data['quantity']
     cart = cart_service.modify_product_quantity(user_id, product_id, quantity)
-    total_price = sum(item.quantity * product_service.get_product(item.product_id).price for item in cart.items)
+    total_price = sum(item.quantity * ProductService().get_product(item.product_id).price for item in cart.items)
     response_data = cart.dict()
     response_data['total_price'] = total_price
     return jsonify(response_data), 200
