@@ -26,10 +26,10 @@ class ProductRepository:
             row = cursor.fetchone()
             return Product(*row) if row else None
 
-    def update_product(self, product_id: int, name: str, description: str, price: float) -> None:
-        logger.info("Updating product id='%s'", product_id)
+    def delete_product(self, product_id: int) -> None:
+        logger.info("Deleting product id='%s'", product_id)
         with self._get_connection() as conn:
             conn.execute(
-                "UPDATE products SET name=?, description=?, price=?, updated_at=? WHERE id=?",
-                (name, description, price, datetime.now(), product_id),
+                "UPDATE products SET is_deleted=?, updated_at=? WHERE id=?",
+                (True, datetime.now(), product_id),
             )
