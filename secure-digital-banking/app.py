@@ -1,11 +1,21 @@
 from flask import Flask
 from backend.controllers.auth.auth_controller import auth_controller
 from backend.controllers.accounts.account_controller import account_controller
+from backend.controllers.notifications.notification_controller import notification_controller
+from backend.controllers.documents.document_controller import document_controller
+from backend.controllers.requests.request_controller import request_controller
+from backend.controllers.dashboard.dashboard_controller import dashboard_controller
+from backend.controllers.audit.audit_controller import audit_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.register_blueprint(auth_controller, url_prefix='/auth')
     app.register_blueprint(account_controller, url_prefix='/api')
+    app.register_blueprint(notification_controller, url_prefix='/api')
+    app.register_blueprint(document_controller, url_prefix='/api')
+    app.register_blueprint(request_controller, url_prefix='/api')
+    app.register_blueprint(dashboard_controller, url_prefix='/api')
+    app.register_blueprint(audit_controller, url_prefix='/api')
     return app
 
 if __name__ == '__main__':
