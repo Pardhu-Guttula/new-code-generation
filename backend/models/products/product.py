@@ -5,7 +5,7 @@ from pydantic import BaseModel, constr, condecimal
 class Product(BaseModel):
     id: int
     name: constr(min_length=1)
-    description: constr(min_length=1)
+    description: Optional[constr(min_length=1)] = ""
     price: condecimal(gt=0)
     category: Optional[str] = None
     created_at: datetime
