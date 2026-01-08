@@ -1,16 +1,11 @@
 from flask import Flask
-from backend.config.config import Config
-from backend.controllers.users.user_controller import user_blueprint
+from backend.controllers.data.data_controller import data_controller
 
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__)
-    app.config.from_object(Config)
-    
-    app.register_blueprint(user_blueprint, url_prefix='/api/users')
-    
+    app.register_blueprint(data_controller, url_prefix='/data')
     return app
 
-app = create_app()
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app = create_app()
+    app.run(host='0.0.0.0', port=5000)
