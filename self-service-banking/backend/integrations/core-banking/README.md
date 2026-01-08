@@ -1,0 +1,1 @@
+self-service-banking/backend/integrations/core-banking/README.md
