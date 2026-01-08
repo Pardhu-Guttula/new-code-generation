@@ -1,1 +1,1 @@
-secure-digital-banking/backend/tests/e2e/README.md
+This directory contains end-to-end (E2E) tests for the backend services in the Secure Digital Banking application.
