@@ -1,4 +1,4 @@
-from backend.repositories.cart.cart_repository.py import CartRepository
+from backend.repositories.cart.cart_repository import CartRepository
 from backend.models.cart.cart import Cart, CartItem
 
 class CartService:
