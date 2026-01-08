@@ -1,1 +1,1 @@
-secure-digital-banking/backend/repositories/audit/README.md
+This directory contains repository files for managing audit-related database operations in the Secure Digital Banking application.
