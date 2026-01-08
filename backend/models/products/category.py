@@ -6,5 +6,6 @@ class Category:
     id: int
     name: str
     description: str
+    parent_id: int
     created_at: datetime
     updated_at: datetime
