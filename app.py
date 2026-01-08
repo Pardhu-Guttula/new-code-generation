@@ -3,9 +3,9 @@ from flask import Flask
 from flask.sessions import SecureCookieSessionInterface
 from flask_session import Session
 from backend.config.settings import settings
-from backend.repositories.products.product_repository import ProductRepository
-from backend.services.product_catalog.product_search_service import ProductSearchService
-from backend.controllers.products.product_search_controller import init_product_search_routes
+from backend.repositories.products.category_repository import CategoryRepository
+from backend.services.product_catalog.category_service import CategoryService
+from backend.controllers.products.category_controller import init_category_routes
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -16,10 +16,10 @@ def create_app() -> Flask:
 
     Session(app)  # Enabling server-side session management
 
-    product_repo = ProductRepository(settings.DATABASE_PATH)
-    product_search_service = ProductSearchService(product_repo)
+    category_repo = CategoryRepository(settings.DATABASE_PATH)
+    category_service = CategoryService(category_repo)
 
-    app.register_blueprint(init_product_search_routes(product_search_service), url_prefix="/api/products")
+    app.register_blueprint(init_category_routes(category_service), url_prefix="/api/categories")
 
     @app.route("/health", methods=["GET"])
     def health() -> dict:
