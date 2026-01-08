@@ -34,6 +34,17 @@ def remove_product_from_cart(user_id):
     cart = cart_service.remove_product_from_cart(user_id, product_id)
     return jsonify(cart.dict()), 200
 
+@cart_blueprint.route('/cart/<int:user_id>/modify', methods=['POST'])
+def modify_product_quantity(user_id):
+    data = request.json
+    product_id = data['product_id']
+    quantity = data['quantity']
+    cart = cart_service.modify_product_quantity(user_id, product_id, quantity)
+    total_price = sum(item.quantity * product_service.get_product(item.product_id).price for item in cart.items)
+    response_data = cart.dict()
+    response_data['total_price'] = total_price
+    return jsonify(response_data), 200
+
 @cart_blueprint.route('/cart/<int:user_id>/clear', methods=['POST'])
 def clear_cart(user_id):
     cart_service.clear_cart(user_id)
