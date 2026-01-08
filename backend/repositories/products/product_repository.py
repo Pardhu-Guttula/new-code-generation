@@ -19,3 +19,6 @@ class ProductRepository:
 
     def list_products(self) -> List[Product]:
         pass  # Implement database list retrieval logic here
+
+    def search_products(self, query: str, page: int, page_size: int) -> List[Product]:
+        pass  # Implement search logic here
