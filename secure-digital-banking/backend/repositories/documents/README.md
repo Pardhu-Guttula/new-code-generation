@@ -1,1 +1,1 @@
-secure-digital-banking/backend/repositories/documents/README.md
+This directory contains repository files for managing document-related database operations in the Secure Digital Banking application.
