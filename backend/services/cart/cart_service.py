@@ -18,9 +18,14 @@ class CartService:
     def remove_from_cart(self, user_id: int, product_id: int) -> ShoppingCart:
         logger.info("Service layer removing product '%s' from cart for user '%s'", product_id, user_id)
         return self._cart_repo.remove_from_cart(user_id, product_id)
-    
+
     def update_cart_item(self, user_id: int, product_id: int, quantity: int) -> ShoppingCart:
         if quantity <= 0:
             raise ValueError("Quantity must be a positive number")
         logger.info("Service layer updating product '%s' quantity to '%s' for user '%s'", product_id, quantity, user_id)
         return self._cart_repo.update_cart_item(user_id, product_id, quantity)
+
+    def get_user_cart(self, user_id: int) -> ShoppingCart:
+        logger.info("Fetching shopping cart for user '%s'", user_id)
+        items = self._cart_repo.get_cart_items(user_id)
+        return ShoppingCart(user_id=user_id, items=items, created_at=datetime.now(), updated_at=datetime.now())
