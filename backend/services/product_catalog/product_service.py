@@ -24,18 +24,11 @@ class ProductService:
     def get_product(self, product_id: int) -> Product:
         return self.product_repository.get_product_by_id(product_id)
 
-    def update_product(self, product_id: int, product_data: Product) -> Product:
-        existing_product = self.product_repository.get_product_by_id(product_id)
-        if not existing_product:
-            raise Exception('Product not found')
-        updated_data = product_data.dict(exclude_unset=True)
-        for key, value in updated_data.items():
-            setattr(existing_product, key, value)
-        existing_product.updated_at = datetime.now()
-        return self.product_repository.update_product(existing_product)
-
     def delete_product(self, product_id: int) -> None:
         self.product_repository.delete_product(product_id)
 
     def list_products(self) -> List[Product]:
         return self.product_repository.list_products()
+
+    def search_products(self, query: str, page: int, page_size: int) -> List[Product]:
+        return self.product_repository.search_products(query, page, page_size)
