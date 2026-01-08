@@ -1,3 +1,2 @@
 Flask==2.3.2
-flask-socketio==5.2.0
 pydantic==1.10.2
