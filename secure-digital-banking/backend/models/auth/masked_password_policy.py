@@ -1,13 +1,14 @@
 class MaskedPasswordPolicy:
-    def __init__(self, show_start: int = 0, show_end: int = 0):
+    def __init__(self, show_start: int = 1, show_end: int = 1):
         self.show_start = show_start
         self.show_end = show_end
 
     def mask_password(self, password: str) -> str:
-        if self.show_start >= len(password) or self.show_end >= len(password):
+        if len(password) <= self.show_start + self.show_end:
             return '*' * len(password)
-
-        if self.show_start + self.show_end >= len(password):
-            return '*' * len(password)
-
-        return password[:self.show_start] + '*' * (len(password) - (self.show_start + self.show_end)) + password[-self.show_end:]
+        
+        return (
+            password[:self.show_start] + 
+            '*' * (len(password) - self.show_start - self.show_end) + 
+            password[-self.show_end:]
+        )
