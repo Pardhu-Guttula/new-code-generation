@@ -1,11 +1,16 @@
-from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, EmailStr, constr
 
-@dataclass(frozen=True, slots=True)
-class User:
+class User(BaseModel):
     id: int
-    username: str
-    email: str
-    hashed_password: str
+    email: EmailStr
+    password: constr(min_length=8)
+    login_attempts: int = 0
+    is_locked: bool = False
+    last_login_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
+
+    class Config:
+        orm_mode = True
