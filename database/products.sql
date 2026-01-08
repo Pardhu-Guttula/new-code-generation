@@ -3,7 +3,8 @@ CREATE TABLE products (
     name TEXT NOT NULL UNIQUE,
     description TEXT NOT NULL,
     price DECIMAL NOT NULL CHECK (price > 0),
-    category TEXT,
+    category_id INTEGER,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
