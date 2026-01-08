@@ -1,5 +1,5 @@
-from typing import Optional
-from backend.models.auth.user import User
+from typing import Optional, List
+from backend.models.users.user import User
 
 class UserRepository:
     def create(self, user: User) -> User:
@@ -10,7 +10,7 @@ class UserRepository:
         # Dummy implementation; replace with actual database query
         pass
 
-    def find_by_username(self, username: str) -> Optional<User]:
+    def find_by_email(self, email: str) -> Optional<User]:
         # Dummy implementation; replace with actual database query
         pass
 
