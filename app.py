@@ -1,9 +1,9 @@
 from flask import Flask
-from backend.controllers.users.role_controller import role_controller
+from backend.controllers.users.document_controller import document_controller
 
 def create_app() -> Flask:
     app = Flask(__name__)
-    app.register_blueprint(role_controller, url_prefix='/user')
+    app.register_blueprint(document_controller, url_prefix='/user')
     return app
 
 if __name__ == '__main__':
