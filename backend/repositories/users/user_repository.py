@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 from typing import Optional
-from backend.models.users.user import User
+from backend.models.users.user import User, PasswordReset
 import logging
 
 logger = logging.getLogger(__name__)
@@ -24,18 +24,32 @@ class UserRepository:
             row = cursor.fetchone()
             return User(*row) if row else None
 
-    def update_user_login_attempts(self, user_id: int, attempts: int) -> None:
-        logger.info("Updating login attempts for user_id=%s", user_id)
+    def create_password_reset_token(self, user_id: int, token: str, expires_at: datetime) -> PasswordReset:
+        logger.info("Creating password reset token for user_id=%s", user_id)
         with self._get_connection() as conn:
-            conn.execute(
-                "UPDATE users SET login_attempts=?, is_locked=? WHERE id=?",
-                (attempts, attempts >= 5, user_id),
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO password_resets (user_id, token, expires_at, created_at) VALUES (?, ?, ?, ?)",
+                (user_id, token, expires_at, datetime.now()),
             )
+            reset_id = cursor.lastrowid
+        return PasswordReset(id=reset_id, user_id=user_id, token=token, expires_at=expires_at, created_at=datetime.now())
 
-    def update_last_login(self, user_id: int) -> None:
-        logger.info("Updating last login time for user_id=%s", user_id)
+    def get_password_reset_by_token(self, token: str) -> Optional[PasswordReset]:
+        logger.info("Fetching password reset token")
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT id, user_id, token, expires_at, created_at FROM password_resets WHERE token=?",
+                (token,),
+            )
+            row = cursor.fetchone()
+            return PasswordReset(*row) if row else None
+
+    def update_user_password(self, user_id: int, new_password: str) -> None:
+        logger.info("Updating password for user_id=%s", user_id)
         with self._get_connection() as conn:
             conn.execute(
-                "UPDATE users SET last_login_at=?, login_attempts=0 WHERE id=?",
-                (datetime.now(), user_id),
+                "UPDATE users SET password=?, updated_at=? WHERE id=?",
+                (new_password, datetime.now(), user_id),
             )
