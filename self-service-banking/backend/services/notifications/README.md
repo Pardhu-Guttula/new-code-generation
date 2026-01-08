@@ -1,0 +1,1 @@
+self-service-banking/backend/services/notifications/README.md
