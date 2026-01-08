@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 from typing import Optional
-from backend.models.users.user import User, PasswordReset
+from backend.models.users.user import User
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,38 +18,27 @@ class UserRepository:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT id, email, password, login_attempts, is_locked, last_login_at, created_at, updated_at FROM users WHERE email=?",
+                "SELECT id, email, password, first_name, last_name, phone_number, login_attempts, is_locked, last_login_at, created_at, updated_at FROM users WHERE email=?",
                 (email,),
             )
             row = cursor.fetchone()
             return User(*row) if row else None
 
-    def create_password_reset_token(self, user_id: int, token: str, expires_at: datetime) -> PasswordReset:
-        logger.info("Creating password reset token for user_id=%s", user_id)
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "INSERT INTO password_resets (user_id, token, expires_at, created_at) VALUES (?, ?, ?, ?)",
-                (user_id, token, expires_at, datetime.now()),
-            )
-            reset_id = cursor.lastrowid
-        return PasswordReset(id=reset_id, user_id=user_id, token=token, expires_at=expires_at, created_at=datetime.now())
-
-    def get_password_reset_by_token(self, token: str) -> Optional[PasswordReset]:
-        logger.info("Fetching password reset token")
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "SELECT id, user_id, token, expires_at, created_at FROM password_resets WHERE token=?",
-                (token,),
-            )
-            row = cursor.fetchone()
-            return PasswordReset(*row) if row else None
-
-    def update_user_password(self, user_id: int, new_password: str) -> None:
-        logger.info("Updating password for user_id=%s", user_id)
+    def update_user_profile(self, user_id: int, first_name: str, last_name: str, phone_number: str) -> None:
+        logger.info("Updating profile for user_id=%s", user_id)
         with self._get_connection() as conn:
             conn.execute(
-                "UPDATE users SET password=?, updated_at=? WHERE id=?",
-                (new_password, datetime.now(), user_id),
+                "UPDATE users SET first_name=?, last_name=?, phone_number=?, updated_at=? WHERE id=?",
+                (first_name, last_name, phone_number, datetime.now(), user_id),
             )
+
+    def get_user_by_id(self, user_id: int) -> Optional[User]:
+        logger.info("Fetching user by id=%s", user_id)
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT id, email, password, first_name, last_name, phone_number, login_attempts, is_locked, last_login_at, created_at, updated_at FROM users WHERE id=?",
+                (user_id,),
+            )
+            row = cursor.fetchone()
+            return User(*row) if row else None
