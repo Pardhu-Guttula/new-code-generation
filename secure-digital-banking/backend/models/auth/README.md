@@ -1,3 +1,1 @@
-# Authentication Model
-
-This model defines the structure of authentication data, including user credentials, tokens, and other related information.
+This directory contains model files for authentication-related data structures in the Secure Digital Banking application.
