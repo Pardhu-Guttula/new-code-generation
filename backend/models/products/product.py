@@ -1,13 +1,15 @@
-from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, constr, condecimal
 
-@dataclass(frozen=True, slots=True)
-class Product:
+class Product(BaseModel):
     id: int
-    name: str
-    description: str
-    price: float
-    category_id: int
-    is_deleted: bool
+    name: constr(min_length=1)
+    description: constr(min_length=1)
+    price: condecimal(gt=0)
+    category: Optional[str] = None
     created_at: datetime
     updated_at: datetime
+
+    class Config:
+        orm_mode = True
