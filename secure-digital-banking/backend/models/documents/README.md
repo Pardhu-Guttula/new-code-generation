@@ -1,1 +1,1 @@
-secure-digital-banking/backend/models/documents/README.md
+This directory contains model files for document-related data structures in the Secure Digital Banking application.
