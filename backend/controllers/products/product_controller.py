@@ -30,5 +30,9 @@ def list_products():
 
 @product_blueprint.route('/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
+    # You may want to add additional authentication check to ensure only admins can delete products
+    confirmation = request.json.get('confirmation')
+    if confirmation != 'yes':
+        return jsonify({"error": "Product deletion not confirmed"}), 400
     product_service.delete_product(product_id)
     return jsonify({"message": "Product deleted"}), 200
