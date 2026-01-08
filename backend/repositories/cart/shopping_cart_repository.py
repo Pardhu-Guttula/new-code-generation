@@ -48,7 +48,7 @@ class ShoppingCartRepository:
             )
             items = self.get_cart_items(user_id)
             return ShoppingCart(user_id=user_id, items=items, created_at=datetime.now(), updated_at=datetime.now())
-    
+
     def update_cart_item(self, user_id: int, product_id: int, quantity: int) -> ShoppingCart:
         logger.info("Updating product '%s' quantity to '%s' for user '%s'", product_id, quantity, user_id)
         with self._get_connection() as conn:
