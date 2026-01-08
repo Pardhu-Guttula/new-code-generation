@@ -38,5 +38,5 @@ class AuthService:
 
     def mask_password(self, password: str) -> str:
         if not self.masked_password_policy:
-            return '*' * len(password)
+            return password
         return self.masked_password_policy.mask_password(password)
