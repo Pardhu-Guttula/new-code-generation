@@ -14,6 +14,8 @@ class ProductService:
         if not existing_product:
             raise Exception('Product not found')
         updated_data = product_data.dict(exclude_unset=True)
+        if 'description' in updated_data and not updated_data['description']:
+            updated_data.pop('description')
         for key, value in updated_data.items():
             setattr(existing_product, key, value)
         existing_product.updated_at = datetime.now()
