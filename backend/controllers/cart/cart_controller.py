@@ -83,4 +83,24 @@ def init_cart_routes(service: CartService) -> Blueprint:
             logger.error("Unexpected error updating cart item: %s", e)
             return jsonify({"error": "Internal server error"}), 500
 
+    @cart_bp.route("/load", methods=["GET"])
+    def load_cart() -> tuple:
+        user_id = request.args.get("user_id", type=int)
+        
+        if user_id is None:
+            return jsonify({"error": "User ID is required"}), 400
+
+        try:
+            cart = service.get_user_cart(user_id)
+            return jsonify({
+                "user_id": cart.user_id,
+                "items": [{
+                    "product_id": item.product_id,
+                    "quantity": item.quantity
+                } for item in cart.items]
+            }), 200
+        except Exception as e:
+            logger.error("Unexpected error loading cart: %s", e)
+            return jsonify({"error": "Internal server error"}), 500
+
     return cart_bp
