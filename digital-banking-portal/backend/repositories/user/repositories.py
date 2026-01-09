@@ -1,5 +1,5 @@
-from digital-banking-portal.backend.models.user.models import User
-from digital-banking-portal.backend import db
+from digital_banking_portal.backend.models.user.models import User
+from digital_banking_portal.backend import db
 
 class UserRepository:
 
