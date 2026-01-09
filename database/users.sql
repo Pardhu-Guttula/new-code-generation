@@ -1,11 +1,9 @@
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    mfa_enabled BOOLEAN NOT NULL DEFAULT 0,
-    mfa_secret TEXT,
-    is_active BOOLEAN NOT NULL DEFAULT 1,
-    last_login_at TIMESTAMP,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    image_file TEXT NOT NULL DEFAULT 'default.jpg',
+    registered_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP
 );
