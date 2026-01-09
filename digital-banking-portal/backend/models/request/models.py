@@ -10,4 +10,4 @@ class Request(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
-        return f"Request('{self.description}', '{self.status}')"
+        return f"Request('{self.description}', '{self.status}')
