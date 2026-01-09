@@ -1,1 +1,0 @@
-digital-banking-portal/backend/models/accounts/README.md

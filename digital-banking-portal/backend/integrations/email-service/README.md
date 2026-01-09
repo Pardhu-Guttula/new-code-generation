@@ -1,1 +1,0 @@
-digital-banking-portal/backend/integrations/email-service/README.md

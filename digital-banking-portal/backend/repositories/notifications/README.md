@@ -1,1 +1,0 @@
-digital-banking-portal/backend/repositories/notifications/README.md

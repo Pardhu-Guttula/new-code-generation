@@ -1,1 +1,0 @@
-digital-banking-portal/backend/tests/integration/README.md
