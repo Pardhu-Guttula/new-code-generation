@@ -2,7 +2,7 @@ from datetime import datetime
 from digital_banking_portal.backend.models import db
 
 class Notification(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary key=True, autoincrement=True)
     message = db.Column(db.String(200), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     is_read = db.Column(db.Boolean, nullable=False, default=False)
