@@ -1,1 +1,3 @@
-secure-digital-banking/backend/tests/integration/README.md
+backend/tests/integration
+
+This directory contains the integration tests.
