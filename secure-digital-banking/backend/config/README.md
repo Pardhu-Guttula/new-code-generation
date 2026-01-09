@@ -1,1 +1,3 @@
-This directory contains configuration files for the backend services of the Secure Digital Banking application.
+backend/config
+
+This directory contains configuration files.
